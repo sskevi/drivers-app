@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drivers App - Find Your Driving Instructor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        nav a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+        
+        .how-it-works {
+            background: white;
+            padding: 4rem 2rem;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+        
+        .step h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .api-status {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-online {
+            background: #22c55e;
+        }
+        
+        .status-offline {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🚗 DriversApp</div>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#api">API</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Find Your Perfect Driving Instructor</h1>
+        <p>Connect with qualified driving instructors in your area. Book lessons, compare prices, and learn to drive with confidence.</p>
+        <div class="cta-buttons">
+            <button class="btn btn-primary" onclick="alert('Registration feature coming soon! Use the API endpoints to register.')">Find an Instructor</button>
+            <button class="btn btn-secondary" onclick="alert('Instructor registration coming soon! Use the API endpoints to register.')">Become an Instructor</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="api-status" class="api-status">
+            <h3>API Status: <span class="status-indicator" id="status-dot"></span><span id="status-text">Checking...</span></h3>
+            <p id="api-message"></p>
+        </div>
+
+        <h2 class="section-title" id="features">Why Choose DriversApp?</h2>
+        <p class="section-subtitle">Everything you need for a great learning experience</p>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3>Qualified Instructors</h3>
+                <p>All instructors are verified with proper credentials and certifications. View their experience, ratings, and reviews.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Transparent Pricing</h3>
+                <p>Compare prices across instructors. Choose from hourly rates or package deals. No hidden fees.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3>Easy Scheduling</h3>
+                <p>View real-time availability and book lessons that fit your schedule. Get instant confirmation.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Payments</h3>
+                <p>Safe and secure payment processing powered by Stripe. Your financial information is protected.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Reviews & Ratings</h3>
+                <p>Read authentic reviews from other learners. Make informed decisions based on real experiences.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Real-time Messaging</h3>
+                <p>Chat directly with instructors before booking. Ask questions and coordinate pickup locations.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Get started in three simple steps</p>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Search & Compare</h3>
+                    <p>Browse instructors in your area. Filter by location, vehicle type, price, and ratings.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Book & Pay</h3>
+                    <p>Select available time slots and book your lesson. Pay securely online with Stripe.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Learn & Review</h3>
+                    <p>Complete your lesson and share your experience. Help others find great instructors.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="api">
+        <h2 class="section-title">API Endpoints</h2>
+        <p class="section-subtitle">RESTful API for developers</p>
+        
+        <div class="feature-card">
+            <h3>Available Endpoints</h3>
+            <ul style="list-style: none; padding-left: 0;">
+                <li style="padding: 0.5rem 0;">✅ <strong>POST /api/auth/register</strong> - Register new user</li>
+                <li style="padding: 0.5rem 0;">✅ <strong>POST /api/auth/login</strong> - User authentication</li>
+                <li style="padding: 0.5rem 0;">✅ <strong>GET /api/instructors</strong> - List all instructors</li>
+                <li style="padding: 0.5rem 0;">✅ <strong>GET /api/instructors/search</strong> - Search & filter instructors</li>
+                <li style="padding: 0.5rem 0;">✅ <strong>POST /api/bookings</strong> - Create new booking</li>
+                <li style="padding: 0.5rem 0;">✅ <strong>POST /api/reviews</strong> - Submit review</li>
+                <li style="padding: 0.5rem 0;">✅ <strong>POST /api/messages</strong> - Send message</li>
+            </ul>
+            <p style="margin-top: 1rem;">
+                <strong>Base URL:</strong> <code style="background: #f5f5f5; padding: 0.25rem 0.5rem; border-radius: 3px;">http://localhost:5000/api</code>
+            </p>
+            <p style="margin-top: 0.5rem;">
+                See <a href="API_TESTING.md" style="color: #667eea;">API_TESTING.md</a> for detailed documentation and examples.
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 DriversApp. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">A two-sided marketplace for driving instructors and learners</p>
+    </footer>
+
+    <script>
+        // Check API health status
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                
+                if (response.ok && data.status === 'ok') {
+                    document.getElementById('status-dot').className = 'status-indicator status-online';
+                    document.getElementById('status-text').textContent = 'Online';
+                    document.getElementById('api-message').textContent = data.message;
+                } else {
+                    throw new Error('API not responding correctly');
+                }
+            } catch (error) {
+                document.getElementById('status-dot').className = 'status-indicator status-offline';
+                document.getElementById('status-text').textContent = 'Offline';
+                document.getElementById('api-message').textContent = 'Server is not running. Start it with: npm run dev';
+            }
+        }
+        
+        // Check status on load
+        checkAPIStatus();
+        
+        // Recheck every 30 seconds
+        setInterval(checkAPIStatus, 30000);
+    </script>
+</body>
+</html>

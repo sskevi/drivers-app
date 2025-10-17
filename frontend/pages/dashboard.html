@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard - DriversApp</title>
+    <link rel="stylesheet" href="/frontend/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="window.location.href='/'">🚗 DriversApp</div>
+            <ul id="nav-auth"></ul>
+        </nav>
+    </header>
+
+    <main class="container" style="padding: 3rem 2rem;">
+        <h1 class="mb-4">Instructor Dashboard</h1>
+        
+        <div id="dashboard-content">
+            <div class="card mb-4">
+                <h2 class="mb-3">My Profile</h2>
+                <div id="profile-info"></div>
+                <button class="btn btn-primary mt-3" onclick="app.openModal('profileModal')">
+                    Edit Profile
+                </button>
+            </div>
+            
+            <div class="card">
+                <h2 class="mb-3">My Bookings</h2>
+                <div id="bookings-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="modal-close" onclick="app.closeModal('profileModal')">&times;</button>
+            </div>
+            
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="experience">Years of Experience</label>
+                    <input type="number" id="experience" name="experience" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="hourlyRate">Hourly Rate ($)</label>
+                    <input type="number" id="hourlyRate" name="hourlyRate" min="0" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city">
+                </div>
+                
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 DriversApp. All rights reserved.</p>
+    </footer>
+
+    <script src="/frontend/js/app.js"></script>
+    <script>
+        async function checkAuth() {
+            if (!app.state.token) {
+                window.location.href = '/frontend/pages/login.html';
+                return false;
+            }
+            
+            const user = await app.getCurrentUser();
+            if (!user || user.role !== 'instructor') {
+                window.location.href = '/';
+                return false;
+            }
+            
+            return true;
+        }
+        
+        async function loadProfile() {
+            try {
+                const response = await fetch('http://localhost:5000/api/instructors/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${app.state.token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const profile = await response.json();
+                    renderProfile(profile);
+                    populateProfileForm(profile);
+                } else {
+                    document.getElementById('profile-info').innerHTML = `
+                        <p>No profile found. Please create your instructor profile.</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+        
+        function renderProfile(profile) {
+            const user = profile.user || {};
+            document.getElementById('profile-info').innerHTML = `
+                <p><strong>Name:</strong> ${user.name}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Experience:</strong> ${profile.experience || 0} years</p>
+                <p><strong>Hourly Rate:</strong> $${profile.pricing?.hourlyRate || 0}/hr</p>
+                <p><strong>Location:</strong> ${profile.serviceArea?.city || 'Not set'}, ${profile.serviceArea?.state || ''}</p>
+                <p><strong>Rating:</strong> ⭐ ${profile.rating?.average.toFixed(1) || 0} (${profile.rating?.count || 0} reviews)</p>
+            `;
+        }
+        
+        function populateProfileForm(profile) {
+            document.getElementById('bio').value = profile.bio || '';
+            document.getElementById('experience').value = profile.experience || 0;
+            document.getElementById('hourlyRate').value = profile.pricing?.hourlyRate || 0;
+            document.getElementById('city').value = profile.serviceArea?.city || '';
+            document.getElementById('state').value = profile.serviceArea?.state || '';
+        }
+        
+        async function loadBookings() {
+            try {
+                const bookings = await app.getMyBookings();
+                renderBookings(bookings);
+            } catch (error) {
+                app.showError('bookings-list', 'Failed to load bookings');
+            }
+        }
+        
+        function renderBookings(bookings) {
+            const container = document.getElementById('bookings-list');
+            
+            if (!bookings || bookings.length === 0) {
+                container.innerHTML = '<p>No bookings yet.</p>';
+                return;
+            }
+            
+            container.innerHTML = bookings.map(booking => {
+                const learner = booking.learner || {};
+                return `
+                    <div class="card mb-2" style="padding: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4>${learner.name}</h4>
+                                <p style="margin: 0.5rem 0;">
+                                    📅 ${app.formatDate(booking.date)} at ${booking.startTime}
+                                </p>
+                                <p style="margin: 0;">
+                                    💰 ${app.formatPrice(booking.totalPrice)} • 
+                                    Status: <span style="color: ${booking.status === 'confirmed' ? 'var(--success-color)' : 'var(--warning-color)'}">
+                                        ${booking.status}
+                                    </span>
+                                </p>
+                            </div>
+                            ${booking.status === 'confirmed' ? `
+                                <button class="btn btn-success btn-sm" onclick="completeBooking('${booking._id}')">
+                                    Mark Complete
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        async function completeBooking(bookingId) {
+            try {
+                await app.updateBookingStatus(bookingId, 'completed');
+                app.showNotification('Booking marked as completed!', 'success');
+                loadBookings();
+            } catch (error) {
+                app.showNotification('Failed to update booking', 'error');
+            }
+        }
+        
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const profileData = {
+                bio: document.getElementById('bio').value,
+                experience: parseInt(document.getElementById('experience').value),
+                pricing: {
+                    hourlyRate: parseFloat(document.getElementById('hourlyRate').value)
+                },
+                serviceArea: {
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value
+                },
+                vehicleType: ['Manual', 'Automatic'],
+                languages: ['English'],
+                availability: []
+            };
+            
+            try {
+                await app.createInstructorProfile(profileData);
+                app.showNotification('Profile updated successfully!', 'success');
+                app.closeModal('profileModal');
+                loadProfile();
+            } catch (error) {
+                app.showNotification(error.message || 'Failed to update profile', 'error');
+            }
+        });
+        
+        // Initialize
+        (async () => {
+            if (await checkAuth()) {
+                loadProfile();
+                loadBookings();
+            }
+        })();
+    </script>
+</body>
+</html>

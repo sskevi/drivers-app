@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Instructors - DriversApp</title>
+    <link rel="stylesheet" href="/frontend/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="window.location.href='/'">🚗 DriversApp</div>
+            <ul id="nav-auth">
+                <li><a href="/frontend/pages/instructors.html">Find Instructors</a></li>
+                <li><a href="/frontend/pages/login.html">Login</a></li>
+                <li><button class="btn btn-sm btn-primary" onclick="window.location.href='/frontend/pages/register.html'">Sign Up</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" style="padding: 3rem 2rem;">
+        <h1 class="text-center mb-4">Find Driving Instructors</h1>
+        
+        <!-- Search Filters -->
+        <div class="card mb-4">
+            <h3 class="mb-3">Search Filters</h3>
+            <form id="searchForm">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" placeholder="e.g., Los Angeles">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vehicleType">Vehicle Type</label>
+                        <select id="vehicleType" name="vehicleType">
+                            <option value="">All Types</option>
+                            <option value="Manual">Manual</option>
+                            <option value="Automatic">Automatic</option>
+                            <option value="Motorcycle">Motorcycle</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="maxPrice">Max Price/Hour</label>
+                        <input type="number" id="maxPrice" name="maxPrice" placeholder="e.g., 100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="minRating">Min Rating</label>
+                        <select id="minRating" name="minRating">
+                            <option value="">Any Rating</option>
+                            <option value="4">4+ Stars</option>
+                            <option value="4.5">4.5+ Stars</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearFilters()">Clear Filters</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Results -->
+        <div id="results-container">
+            <div id="instructors-list"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 DriversApp. All rights reserved.</p>
+    </footer>
+
+    <script src="/frontend/js/app.js"></script>
+    <script>
+        async function loadInstructors(filters = {}) {
+            app.showLoading('instructors-list');
+            
+            try {
+                const instructors = await app.getInstructors(filters);
+                renderInstructors(instructors);
+            } catch (error) {
+                app.showError('instructors-list', error.message || 'Failed to load instructors');
+            }
+        }
+        
+        function renderInstructors(instructors) {
+            const container = document.getElementById('instructors-list');
+            
+            if (!instructors || instructors.length === 0) {
+                app.showEmptyState('instructors-list', 'No instructors found. Try adjusting your filters.');
+                return;
+            }
+            
+            container.innerHTML = instructors.map(instructor => {
+                const user = instructor.user || {};
+                const rating = instructor.rating || { average: 0, count: 0 };
+                const initials = user.name ? user.name.charAt(0).toUpperCase() : '?';
+                const stars = '⭐'.repeat(Math.round(rating.average));
+                
+                return `
+                    <div class="instructor-card">
+                        <div class="instructor-avatar">${initials}</div>
+                        <div class="instructor-info">
+                            <h2 class="instructor-name">${user.name || 'Unknown'}</h2>
+                            <div class="instructor-rating">
+                                ${stars} ${rating.average.toFixed(1)} (${rating.count} reviews)
+                            </div>
+                            <p>${instructor.bio || 'No bio available'}</p>
+                            <div class="instructor-details">
+                                <span class="detail-badge">📚 ${instructor.experience || 0} years</span>
+                                ${instructor.vehicleType ? instructor.vehicleType.map(v => `<span class="detail-badge">🚗 ${v}</span>`).join('') : ''}
+                                ${instructor.serviceArea ? `<span class="detail-badge">📍 ${instructor.serviceArea.city}</span>` : ''}
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="price-tag">${app.formatPrice(instructor.pricing?.hourlyRate || 0)}/hr</div>
+                            <button class="btn btn-primary mt-2" onclick="viewInstructor('${instructor.user._id}')">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function viewInstructor(userId) {
+            window.location.href = `/frontend/pages/instructor-profile.html?id=${userId}`;
+        }
+        
+        function clearFilters() {
+            document.getElementById('searchForm').reset();
+            loadInstructors();
+        }
+        
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const filters = {};
+            const city = document.getElementById('city').value;
+            const vehicleType = document.getElementById('vehicleType').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+            const minRating = document.getElementById('minRating').value;
+            
+            if (city) filters.city = city;
+            if (vehicleType) filters.vehicleType = vehicleType;
+            if (maxPrice) filters.maxPrice = maxPrice;
+            if (minRating) filters.minRating = minRating;
+            
+            loadInstructors(filters);
+        });
+        
+        // Load instructors on page load
+        loadInstructors();
+    </script>
+</body>
+</html>
