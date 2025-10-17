@@ -32,6 +32,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
 app.use(express.static('public'));
+app.use('/frontend', express.static('frontend'));
+
+// Serve the main page
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/frontend/pages/home.html');
+});
 
 // Routes
 app.use('/api/auth', authRoutes);

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriversApp - Find Your Perfect Driving Instructor</title>
+    <link rel="stylesheet" href="/frontend/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="window.location.href='/'">🚗 DriversApp</div>
+            <ul id="nav-auth">
+                <li><a href="/frontend/pages/instructors.html">Find Instructors</a></li>
+                <li><a href="/frontend/pages/login.html">Login</a></li>
+                <li><button class="btn btn-sm btn-primary" onclick="window.location.href='/frontend/pages/register.html'">Sign Up</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 2rem; text-align: center;">
+            <div class="container">
+                <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Find Your Perfect Driving Instructor</h1>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+                    Connect with qualified driving instructors in your area. Book lessons, compare prices, and learn to drive with confidence.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" style="background: white; color: #667eea;" onclick="window.location.href='/frontend/pages/instructors.html'">
+                        Find an Instructor
+                    </button>
+                    <button class="btn btn-secondary" style="border-color: white; color: white;" onclick="window.location.href='/frontend/pages/register.html?role=instructor'">
+                        Become an Instructor
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="container" style="padding: 4rem 2rem;">
+            <h2 class="text-center" style="font-size: 2rem; margin-bottom: 1rem;">Why Choose DriversApp?</h2>
+            <p class="text-center" style="color: #666; margin-bottom: 3rem;">Everything you need for a great learning experience</p>
+            
+            <div class="card-grid">
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Qualified Instructors</h3>
+                    <p>All instructors are verified with proper credentials and certifications. View their experience, ratings, and reviews.</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💰</div>
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Transparent Pricing</h3>
+                    <p>Compare prices across instructors. Choose from hourly rates or package deals. No hidden fees.</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📅</div>
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Easy Scheduling</h3>
+                    <p>View real-time availability and book lessons that fit your schedule. Get instant confirmation.</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Secure Payments</h3>
+                    <p>Safe and secure payment processing powered by Stripe. Your financial information is protected.</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⭐</div>
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Reviews & Ratings</h3>
+                    <p>Read authentic reviews from other learners. Make informed decisions based on real experiences.</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💬</div>
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Real-time Messaging</h3>
+                    <p>Chat directly with instructors before booking. Ask questions and coordinate pickup locations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section style="background: white; padding: 4rem 2rem;">
+            <div class="container">
+                <h2 class="text-center" style="font-size: 2rem; margin-bottom: 1rem;">How It Works</h2>
+                <p class="text-center" style="color: #666; margin-bottom: 3rem;">Get started in three simple steps</p>
+                
+                <div class="card-grid">
+                    <div class="text-center">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; margin: 0 auto 1rem;">1</div>
+                        <h3 style="margin-bottom: 0.5rem;">Search & Compare</h3>
+                        <p>Browse instructors in your area. Filter by location, vehicle type, price, and ratings.</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; margin: 0 auto 1rem;">2</div>
+                        <h3 style="margin-bottom: 0.5rem;">Book & Pay</h3>
+                        <p>Select available time slots and book your lesson. Pay securely online with Stripe.</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; margin: 0 auto 1rem;">3</div>
+                        <h3 style="margin-bottom: 0.5rem;">Learn & Review</h3>
+                        <p>Complete your lesson and share your experience. Help others find great instructors.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 DriversApp. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">A two-sided marketplace for driving instructors and learners</p>
+    </footer>
+
+    <script src="/frontend/js/app.js"></script>
+</body>
+</html>

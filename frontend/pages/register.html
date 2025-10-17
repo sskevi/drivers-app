@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - DriversApp</title>
+    <link rel="stylesheet" href="/frontend/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="window.location.href='/'">🚗 DriversApp</div>
+            <ul>
+                <li><a href="/frontend/pages/instructors.html">Find Instructors</a></li>
+                <li><a href="/frontend/pages/login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container" style="max-width: 600px; padding: 3rem 2rem;">
+            <div class="card">
+                <h1 class="text-center mb-4">Create Account</h1>
+                
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required minlength="6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role">I am a:</label>
+                        <select id="role" name="role" required>
+                            <option value="">Select...</option>
+                            <option value="learner">Learner</option>
+                            <option value="instructor">Instructor</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Sign Up
+                    </button>
+                </form>
+                
+                <p class="text-center mt-3">
+                    Already have an account? 
+                    <a href="/frontend/pages/login.html" style="color: #667eea;">Login</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 DriversApp. All rights reserved.</p>
+    </footer>
+
+    <script src="/frontend/js/app.js"></script>
+    <script>
+        // Check if role is pre-selected from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const roleParam = urlParams.get('role');
+        if (roleParam) {
+            document.getElementById('role').value = roleParam;
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value,
+            };
+            
+            try {
+                const user = await app.register(userData);
+                app.showNotification('Registration successful!', 'success');
+                
+                setTimeout(() => {
+                    if (user.role === 'instructor') {
+                        window.location.href = '/frontend/pages/dashboard.html';
+                    } else {
+                        window.location.href = '/frontend/pages/instructors.html';
+                    }
+                }, 1000);
+            } catch (error) {
+                app.showNotification(error.message || 'Registration failed', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
